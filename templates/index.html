@@ -14,7 +14,7 @@
             <p>Press the R to start a new game.</p>
         </div>
         {{block "game-container" .}}
-            <div id="game-container" hx-post="/tick" hx-trigger="keyup[key=ArrowUp||key=ArrowDown||key=ArrowLeft||key=ArrowRight] from:body" hx-swap="outerHTML">
+            <div id="game-container" hx-post="/tick" hx-trigger="keyup[key=ArrowUp||key=ArrowDown||key=ArrowLeft||key=ArrowRight] from:body" hx-vals='js:{lastKey: event.key}' hx-swap="outerHTML">
                 <div id="score-container">
                     <p>Score: <span id="score"> {{.Score}} </span></p>
                 </div>
@@ -22,7 +22,7 @@
                     {{ range .Board }}
                         <div class="row">
                             {{ range . }}
-                                {{ .Symbol }}
+                                {{ . }}
                             {{ end }}
                         </div>
                     {{ end }}
