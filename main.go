@@ -77,7 +77,7 @@ func newGameState(borders [2]int, snake *snake.Snake) *gameState {
 type cellType string
 
 const (
-	emptyCell     cellType = "X"
+	emptyCell     cellType = "⬜"
 	snakeHeadCell cellType = "🐔"
 	snakeBodyCell cellType = "🧠"
 	foodCell      cellType = "🍗"
@@ -118,7 +118,6 @@ func (g *gameState) eraseSnake() {
 		g.Board[loc[0]][loc[1]] = emptyCell
 	})
 }
-
 func (g *gameState) drawSnake() {
 	var spawnFood bool
 	g.snake.Iterate(func(loc [2]int, bodyPart snake.Part) {
