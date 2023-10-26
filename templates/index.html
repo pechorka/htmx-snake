@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>HTMX Snake Game</title>
-        <script src="https://unpkg.com/htmx.org@1.9.6/dist/htmx.min.js"></script>
+        <script src="https://unpkg.com/htmx.org@1.9.6"></script>
     </head>
     <body>
         <h1>HTMX Snake Game</h1>
@@ -14,7 +14,7 @@
             <p>Press the R to start a new game.</p>
         </div>
         {{block "game-container" .}}
-            <div id="game-container" hx-post="/tick" hx-trigger="keyup[key=ArrowUp] from:body">
+            <div id="game-container" hx-post="/tick" hx-trigger="keyup[key=ArrowUp||key=ArrowDown||key=ArrowLeft||key=ArrowRight] from:body" hx-swap="outerHTML">
                 <div id="score-container">
                     <p>Score: <span id="score"> {{.Score}} </span></p>
                 </div>
