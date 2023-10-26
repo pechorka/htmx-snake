@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"log/slog"
+	"math/rand"
 	"net/http"
 	"sync"
 
@@ -69,15 +70,17 @@ func newGameState(borders [2]int, snake *snake.Snake) *gameState {
 		snake: snake,
 	}
 	state.drawSnake()
+	state.spawnFood()
 	return state
 }
 
 type cellType string
 
 const (
-	emptyCell cellType = "X"
-	snakeHead cellType = "🐔"
-	snakeBody cellType = "🧠"
+	emptyCell     cellType = "X"
+	snakeHeadCell cellType = "🐔"
+	snakeBodyCell cellType = "🧠"
+	foodCell      cellType = "🍗"
 )
 
 func newBoard(row, column int) [][]cellType {
@@ -117,12 +120,31 @@ func (g *gameState) eraseSnake() {
 }
 
 func (g *gameState) drawSnake() {
+	var spawnFood bool
 	g.snake.Iterate(func(loc [2]int, bodyPart snake.Part) {
 		switch bodyPart {
 		case snake.PartHead:
-			g.Board[loc[0]][loc[1]] = snakeHead
+			if g.Board[loc[0]][loc[1]] == foodCell {
+				g.Score++
+				spawnFood = true
+			}
+			g.Board[loc[0]][loc[1]] = snakeHeadCell
 		case snake.PartBody:
-			g.Board[loc[0]][loc[1]] = snakeBody
+			g.Board[loc[0]][loc[1]] = snakeBodyCell
 		}
 	})
+	if spawnFood {
+		g.spawnFood()
+	}
+}
+
+func (g *gameState) spawnFood() {
+	for {
+		i := rand.Intn(len(g.Board))
+		j := rand.Intn(len(g.Board[i]))
+		if g.Board[i][j] == emptyCell {
+			g.Board[i][j] = foodCell
+			return
+		}
+	}
 }
