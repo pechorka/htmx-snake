@@ -99,6 +99,10 @@ func (s *Snake) Iterate(fn func(loc [2]int, bodyPart Part)) {
 	}
 }
 
+func (s *Snake) Direction() direction.Direction {
+	return s.direction
+}
+
 type Part int
 
 const (

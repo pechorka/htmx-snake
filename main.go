@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"html/template"
+	"log/slog"
 	"net/http"
 	"sync"
 
@@ -38,6 +39,7 @@ func run() error {
 
 	mux.Post("/tick", func(w http.ResponseWriter, r *http.Request) {
 		newDirection := r.FormValue("lastKey")
+		slog.Info("request info", "lastKey", newDirection)
 		err := state.MoveSnake(direction.Direction(newDirection))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
@@ -92,6 +94,10 @@ func newBoard(row, column int) [][]cellType {
 func (g *gameState) MoveSnake(to direction.Direction) error {
 	g.mu.Lock()
 	defer g.mu.Unlock()
+
+	if !to.IsValid() {
+		to = g.snake.Direction()
+	}
 
 	if g.snake.CantMove(to) {
 		return fmt.Errorf("can't move in to opposite direction")
