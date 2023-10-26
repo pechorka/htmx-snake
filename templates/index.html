@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>HTMX Snake Game</title>
+        <script src="https://unpkg.com/htmx.org@1.9.6/dist/htmx.min.js"></script>
+    </head>
+    <body>
+        <h1>HTMX Snake Game</h1>
+        <h2>How to play</h2>
+        <div>
+            <p>Use the arrow keys to move the snake.</p>
+            <p>Press the space bar to pause the game.</p>
+            <p>Press the R to start a new game.</p>
+        </div>
+        {{block "game-container" .}}
+            <div id="game-container" hx-post="/tick" hx-trigger="keyup[key=ArrowUp] from:body">
+                <div id="score-container">
+                    <p>Score: <span id="score"> {{.Score}} </span></p>
+                </div>
+                <div id="game">
+                    {{ range .Board }}
+                        <div class="row">
+                            {{ range . }}
+                                {{ .Symbol }}
+                            {{ end }}
+                        </div>
+                    {{ end }}
+                </div>
+            </div>
+        {{end}}
+    </body>
+</html>
